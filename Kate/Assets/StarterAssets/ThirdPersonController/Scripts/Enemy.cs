@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, ILevarDano
 {
     private NavMeshAgent agente;
     private GameObject player;
-    private Animator anim;
+    public Animator anim;
     public float distanciaDoAtaque = 2.0f;
+    public int life = 100;
+    
     
     void Start()
     {
@@ -66,4 +68,19 @@ public class Enemy : MonoBehaviour
     {
         GetComponent<Rigidbody>().isKinematic = false;
     }
+
+    public void TakeDamage(int damageAmount)
+    {
+        life -= damageAmount;
+
+        if(life <= 0)
+        {
+           anim.SetTrigger("die");
+           GetComponent<Collider>().enabled = false;
+        } else
+        {
+            anim.SetTrigger("damage");
+        }
+    }
+
 }
