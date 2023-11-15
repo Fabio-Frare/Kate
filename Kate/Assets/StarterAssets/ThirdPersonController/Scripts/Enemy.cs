@@ -75,10 +75,12 @@ public class Enemy : MonoBehaviour, ILevarDano
 
         if(life <= 0)
         {
-           anim.SetTrigger("die");
-           GetComponent<Collider>().enabled = false;
+            AudioManager.instance.Play("EnemyDeath");
+            anim.SetTrigger("die");
+            GetComponent<Collider>().enabled = false;
         } else
-        {
+        {   
+            AudioManager.instance.Play("EnemyDamage");
             anim.SetTrigger("damage");
         }
     }
