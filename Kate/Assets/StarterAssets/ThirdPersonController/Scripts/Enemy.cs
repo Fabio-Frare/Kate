@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class Enemy : MonoBehaviour, ILevarDano
 {
     private NavMeshAgent agente;
-    private GameObject player;
+    public GameObject player;
     public Animator anim;
     public float distanciaDoAtaque = 2.0f;
     private int life = 100;
@@ -19,7 +19,7 @@ public class Enemy : MonoBehaviour, ILevarDano
         agente = GetComponent<NavMeshAgent>();
         player = GameObject.FindWithTag("Player");
         anim = GetComponent<Animator>();
-        healthBar.gameObject.SetActive(false);
+        healthBar.gameObject.SetActive(false); // Barra de vida inicia invisível.
     }
 
     void Update()
@@ -97,5 +97,13 @@ public class Enemy : MonoBehaviour, ILevarDano
     {
         healthBar.value = life; 
     }
+
+    // Inimigo dá dano atualizando a barra de vida da Kate. Está com erro
+    /*public void DarDano()
+    {
+       player.GetComponent<StarterAssets>().AtualizarVida(-10);
+    }*/
+
+   
 
 }

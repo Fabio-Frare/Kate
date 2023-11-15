@@ -1,6 +1,7 @@
-﻿ using UnityEngine;
+﻿using UnityEngine;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 #endif
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -19,7 +20,7 @@ namespace StarterAssets
         public float MoveSpeed = 2.0f;
 
         [Tooltip("Sprint speed of the character in m/s")]
-        public float SprintSpeed = 5.335f;
+        public float SprintSpeed = 6.5f;
 
         [Tooltip("How fast the character turns to face movement direction")]
         [Range(0.0f, 0.3f)]
@@ -102,7 +103,7 @@ namespace StarterAssets
         private PlayerInput _playerInput;
 #endif
         private Animator _animator;
-        private CharacterController _controller;
+        public CharacterController _controller;
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
 
@@ -113,6 +114,8 @@ namespace StarterAssets
         public Transform arrowPoint;
         public GameObject playerFollowCamera;
         public GameObject playerAimCamera;
+        private int vida = 100;
+        public Slider sliderVida;
 
 
 
@@ -189,6 +192,7 @@ namespace StarterAssets
         {
             GameObject arrow = Instantiate(arrowObject, arrowPoint.position, transform.rotation);
             arrow.GetComponent<Rigidbody>().AddForce(transform.forward * 25f, ForceMode.Impulse);
+            AudioManager.instance.Play("Arrow");
         }
 
         private void LateUpdate()
@@ -239,6 +243,13 @@ namespace StarterAssets
             // Cinemachine will follow this target
             CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
                 _cinemachineTargetYaw, 0.0f);
+        }
+
+        // Atualiza a barra de vida da kate
+        public void AtualizarVida(int novaVida)
+        {
+            vida = Mathf.CeilToInt(Mathf.Clamp(vida + novaVida, 0, 100));
+            sliderVida.value = vida;
         }
 
         private void Move()

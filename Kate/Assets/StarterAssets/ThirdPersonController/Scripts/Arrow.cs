@@ -9,7 +9,7 @@ public class Arrow : MonoBehaviour
     // Destroi a flexa após 10 segundos do lançamento.
     private void Start()
     {
-        Destroy(gameObject, 10);
+        Destroy(gameObject, 7);
     }
 
     private void OnTriggerEnter(Collider other)
