@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour, ILevarDano
 {
@@ -9,7 +10,8 @@ public class Enemy : MonoBehaviour, ILevarDano
     private GameObject player;
     public Animator anim;
     public float distanciaDoAtaque = 2.0f;
-    public int life = 100;
+    private int life = 100;
+    public Slider healthBar;
     
     
     void Start()
@@ -17,12 +19,14 @@ public class Enemy : MonoBehaviour, ILevarDano
         agente = GetComponent<NavMeshAgent>();
         player = GameObject.FindWithTag("Player");
         anim = GetComponent<Animator>();
+        healthBar.gameObject.SetActive(false);
     }
 
     void Update()
     {
         VaiAtrasJogador();
         OlharParaJogador();
+        UpdateLife();
     }
 
     private void VaiAtrasJogador()
@@ -78,11 +82,20 @@ public class Enemy : MonoBehaviour, ILevarDano
             AudioManager.instance.Play("EnemyDeath");
             anim.SetTrigger("die");
             GetComponent<Collider>().enabled = false;
+            healthBar.gameObject.SetActive(false);
+            Destroy(gameObject, 7); // inimigo desaparece do jogo após um tempo morto. 
         } else
         {   
+            healthBar.gameObject.SetActive(true);
             AudioManager.instance.Play("EnemyDamage");
             anim.SetTrigger("damage");
         }
+    }
+
+    // Atualiza a barra de vida do inimigo.
+    private void UpdateLife() 
+    {
+        healthBar.value = life; 
     }
 
 }
