@@ -12,6 +12,8 @@ public class Enemy : MonoBehaviour, ILevarDano
     public float distanciaDoAtaque = 2.0f;
     private int life = 100;
     public Slider healthBar;
+    private FieldOfView fov;
+     private PatrulharAleatorio pal;
     
     
     void Start()
@@ -20,13 +22,26 @@ public class Enemy : MonoBehaviour, ILevarDano
         player = GameObject.FindWithTag("Player");
         anim = GetComponent<Animator>();
         healthBar.gameObject.SetActive(false); // Barra de vida inicia invisível.
+        fov = GetComponent<FieldOfView>();
+        pal = GetComponent<PatrulharAleatorio>();
     }
 
     void Update()
     {
-        VaiAtrasJogador();
-        OlharParaJogador();
+        //VaiAtrasJogador();
+        //OlharParaJogador();
         UpdateLife();
+    
+        if (fov.podeVerPlayer)
+        {
+            VaiAtrasJogador();
+        } else 
+        {
+            anim.SetBool("pararAtaque", true);
+            CorrigirRigiSair();
+            agente.isStopped = false;
+            pal.Andar();
+        }
     }
 
     private void VaiAtrasJogador()
@@ -78,11 +93,13 @@ public class Enemy : MonoBehaviour, ILevarDano
         life -= damageAmount;
 
         if(life <= 0)
-        {
+        {   
+            agente.isStopped = true;
             AudioManager.instance.Play("EnemyDeath");
             anim.SetTrigger("die");
             GetComponent<Collider>().enabled = false;
             healthBar.gameObject.SetActive(false);
+            CorrigirRigiSair();
             Destroy(gameObject, 7); // inimigo desaparece do jogo após um tempo morto. 
         } else
         {   
