@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
+using StarterAssets;
 
 public class Enemy : MonoBehaviour, ILevarDano
 {
@@ -13,7 +14,7 @@ public class Enemy : MonoBehaviour, ILevarDano
     private int life = 100;
     public Slider healthBar;
     private FieldOfView fov;
-     private PatrulharAleatorio pal;
+    private PatrulharAleatorio pal;
     
     
     void Start()
@@ -49,8 +50,7 @@ public class Enemy : MonoBehaviour, ILevarDano
         float distanciaDoPlayer = Vector3.Distance(transform.position, player.transform.position);
         if(distanciaDoPlayer < distanciaDoAtaque) 
         {
-            agente.isStopped = true;
-            
+            agente.isStopped = true;            
             anim.SetTrigger("ataque");
             anim.SetBool("podeAndar", false);
             anim.SetBool("pararAtaque", false);
@@ -101,6 +101,7 @@ public class Enemy : MonoBehaviour, ILevarDano
             healthBar.gameObject.SetActive(false);
             CorrigirRigiSair();
             Destroy(gameObject, 7); // inimigo desaparece do jogo após um tempo morto. 
+            this.enabled = false;  // para de executar este script.
         } else
         {   
             healthBar.gameObject.SetActive(true);
@@ -116,10 +117,10 @@ public class Enemy : MonoBehaviour, ILevarDano
     }
 
     // Inimigo dá dano atualizando a barra de vida da Kate. Está com erro
-    /*public void DarDano()
+    public void DarDano()
     {
-       player.GetComponent<StarterAssets>().AtualizarVida(-10);
-    }*/
+        player.GetComponent<ThirdPersonController>().AtualizarVida(-20);       
+    }
 
    
 

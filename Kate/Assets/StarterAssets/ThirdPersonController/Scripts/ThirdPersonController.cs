@@ -114,7 +114,7 @@ namespace StarterAssets
         public Transform arrowPoint;
         public GameObject playerFollowCamera;
         public GameObject playerAimCamera;
-        private int vida = 100;
+        public int vida = 100;
         public Slider sliderVida;
 
 
@@ -171,7 +171,15 @@ namespace StarterAssets
             Move();
             AimShoot();
         }
+        
+        // Atualiza a barra de vida da kate
+        public void AtualizarVida(int novaVida)
+        {
+            vida = Mathf.CeilToInt(Mathf.Clamp(vida + novaVida, 0, 100));
+            sliderVida.value = vida;
+        }
 
+        // Método que faz a Kate mirar
         private void AimShoot()
         {
             if (_input.isAiming && Grounded && !_input.sprint)
@@ -189,10 +197,11 @@ namespace StarterAssets
             }
         }
 
+        // Método que faz a Kate atirar a flexa
         public void Shoot()
         {
             GameObject arrow = Instantiate(arrowObject, arrowPoint.position, transform.rotation);
-            arrow.GetComponent<Rigidbody>().AddForce(transform.forward * 25f, ForceMode.Impulse);
+            arrow.GetComponent<Rigidbody>().AddForce(transform.forward * 30f, ForceMode.Impulse);
             AudioManager.instance.Play("Arrow");
         }
 
@@ -244,13 +253,6 @@ namespace StarterAssets
             // Cinemachine will follow this target
             CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
                 _cinemachineTargetYaw, 0.0f);
-        }
-
-        // Atualiza a barra de vida da kate
-        public void AtualizarVida(int novaVida)
-        {
-            vida = Mathf.CeilToInt(Mathf.Clamp(vida + novaVida, 0, 100));
-            sliderVida.value = vida;
         }
 
         private void Move()
